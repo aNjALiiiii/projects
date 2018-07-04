@@ -19,10 +19,11 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 red = (200,0,0)
 green = (0,200,0)
+blue = (0,0,200)
 
 bright_red = (255,0,0)
 bright_green = (0,255,0)
-
+bright_blue = (0,0,255)
 clock = pygame.time.Clock()
 
 racecar_width = 73
@@ -121,7 +122,6 @@ def game_loop():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                # gameExit = True
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
@@ -129,10 +129,6 @@ def game_loop():
                     x_change = -5
                 elif event.key == pygame.K_RIGHT:
                     x_change = 5
-                elif event.key == pygame.K_UP:
-                    y_change = -5
-                elif event.key == pygame.K_DOWN:
-                    y_change = 5
             if event.type == pygame.KEYUP:
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         x_change = 0
@@ -144,6 +140,7 @@ def game_loop():
 
         #gameDisplay.fill(white)
         gameDisplay.blit(bg,(0,0))
+        button("Main menu",600,0, 200, 40, blue, bright_blue, game_intro)
         things(thing_startx, thing_starty, thing_width, thing_height, black)
         thing_starty += thing_speed
         things_dodged(dodged)
@@ -161,10 +158,8 @@ def game_loop():
             print(dodged)
 
         if (y < thing_starty + thing_height):
-            # print("Crossed vertically")
             if (
                         x > thing_startx and x < thing_startx + thing_width or x + racecar_width > thing_startx and x + racecar_width < thing_startx + thing_width):
-                # print("Crossed horizontally")
                 crash()
 
         pygame.display.update()
