@@ -3,24 +3,30 @@ import time
 import random
 
 pygame.init()
-
+score = 0
 pygame.mixer.music.load('roaring.wav')
 pygame.mixer.music.play(-1)
-
 display_width = 800
 display_height = 600
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('A bit Racey')
+#car image
 carImg = pygame.image.load('racecar.png')
-bg = pygame.image.load('bg.png')
+#background image
+bg = pygame.image.load('1.png').convert()
+intro_bg = pygame.image.load('bg.png')
+intro_bg = pygame.transform.scale(intro_bg,(display_width,display_height))
 bg = pygame.transform.scale(bg,(display_width,display_height))
+
+gameIcon = pygame.image.load('racecar.png')
+pygame.display.set_icon(gameIcon)
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (200,0,0)
 green = (0,200,0)
 blue = (0,0,200)
-
+gray = (45,44,47)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 bright_blue = (0,0,255)
@@ -61,6 +67,7 @@ def message_display(text):
 
 def crash():
     message_display('You Crashed')
+    #message_display("Your score: %s"%(score))
     game_intro()
 
 def car(x, y):
@@ -95,6 +102,7 @@ def game_intro():
                 quit()
 
         gameDisplay.fill(white)
+        gameDisplay.blit(intro_bg, (0, 0))
         largeText = pygame.font.SysFont("comicsansms", 115)
         TextSurf, TextRect = text_objects("A bit Racey", largeText)
         TextRect.center = ((display_width / 2), (display_height / 2))
@@ -138,11 +146,12 @@ def game_loop():
         x += x_change
         y += y_change
 
-        #gameDisplay.fill(white)
         gameDisplay.blit(bg,(0,0))
-        button("Main menu",600,0, 200, 40, blue, bright_blue, game_intro)
-        things(thing_startx, thing_starty, thing_width, thing_height, black)
+
+        button("Main menu",600,0, 200, 40, green, bright_green, game_intro)
+        things(thing_startx, thing_starty, thing_width, thing_height, gray)
         thing_starty += thing_speed
+        #score = dodged
         things_dodged(dodged)
         car(x, y)
 
@@ -158,8 +167,10 @@ def game_loop():
             print(dodged)
 
         if (y < thing_starty + thing_height):
+            # print("Crossed vertically")
             if (
                         x > thing_startx and x < thing_startx + thing_width or x + racecar_width > thing_startx and x + racecar_width < thing_startx + thing_width):
+                # print("Crossed horizontally")
                 crash()
 
         pygame.display.update()
